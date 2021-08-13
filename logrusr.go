@@ -15,6 +15,15 @@ import (
 const (
 	logrusDiffToInfo = 4
 )
+const (
+	PanicLevel = iota - 4
+	FatalLevel
+	ErrorLevel
+	WarnLevel
+	InfoLevel
+	DebugLevel
+	TraceLevel
+)
 
 type logrusr struct {
 	name             []string
@@ -105,10 +114,50 @@ func (l *logrusr) Info(msg string, keysAndValues ...interface{}) {
 	if !l.Enabled() {
 		return
 	}
+	switch l.level {
+	case InfoLevel:
+		l.level = int(logrus.InfoLevel)
+		l.logger.
+			WithFields(listToLogrusFields(l.defaultFormatter, keysAndValues...)).
+			Info(msg)
+	case WarnLevel:
+		l.level = int(logrus.WarnLevel)
+		l.logger.
+			WithFields(listToLogrusFields(l.defaultFormatter, keysAndValues...)).
+			Warn(msg)
+	case DebugLevel:
+		l.level = int(logrus.DebugLevel)
+		l.logger.
+			WithFields(listToLogrusFields(l.defaultFormatter, keysAndValues...)).
+			Debug(msg)
+	case TraceLevel:
+		l.level = int(logrus.TraceLevel)
+		l.logger.
+			WithFields(listToLogrusFields(l.defaultFormatter, keysAndValues...)).
+			Trace(msg)
+	case ErrorLevel:
+		l.level = int(logrus.ErrorLevel)
+		l.logger.
+			WithFields(listToLogrusFields(l.defaultFormatter, keysAndValues...)).
+			Error(msg)
+	case PanicLevel:
+		l.level = int(logrus.PanicLevel)
+		l.logger.
+			WithFields(listToLogrusFields(l.defaultFormatter, keysAndValues...)).
+			Panic(msg)
+	case FatalLevel:
+		l.level = int(logrus.FatalLevel)
+		l.logger.
+			WithFields(listToLogrusFields(l.defaultFormatter, keysAndValues...)).
+			Fatal(msg)
+	default:
+		l.level = int(logrus.InfoLevel)
+		l.logger.
+			WithFields(listToLogrusFields(l.defaultFormatter, keysAndValues...)).
+			Info(msg)
+	}
 
-	l.logger.
-		WithFields(listToLogrusFields(l.defaultFormatter, keysAndValues...)).
-		Info(msg)
+
 }
 
 // Error logs error messages. Since the log will be written with `Error` level

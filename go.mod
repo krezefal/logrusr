@@ -1,4 +1,4 @@
-module github.com/bombsimon/logrusr
+module github.com/maxan98/logrusr
 
 go 1.13
 
