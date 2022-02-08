@@ -17,6 +17,16 @@ import (
 // this constant to be able to calculate what V(n) values should mean.
 const logrusDiffToInfo = 4
 
+const (
+	PanicLevel = iota - 4
+	FatalLevel
+	ErrorLevel
+	WarnLevel
+	InfoLevel
+	DebugLevel
+	TraceLevel
+)
+
 // FormatFunc is the function to format log values with for non primitive data.
 // By default, this is empty and the data will be JSON marshaled.
 type FormatFunc func(interface{}) string
